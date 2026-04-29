@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { siteinfo } from "@/config/siteinfo";
 import "@/lib/react-responsive-pagination/pagination.css";
+import { getThemeHeadBlockingInlineScript, THEME_STORAGE_KEY } from "@/lib/theme-head-script";
 import { TanstackQueryProvider } from "@/lib/tanstack/query/tsq-provider";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -90,6 +91,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: getThemeHeadBlockingInlineScript() }}
+        />
         {process.env.NODE_ENV === "development" && (
           <Script
             src="//unpkg.com/react-grab/dist/index.global.js"
@@ -105,7 +110,12 @@ export default function RootLayout({
         <PerformanceMonitor />
         <NuqsAdapter>
           <TanstackQueryProvider>
-            <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem>
+            <ThemeProvider
+              attribute="data-theme"
+              defaultTheme="system"
+              enableSystem
+              storageKey={THEME_STORAGE_KEY}
+            >
               <div>
                 <div className="fixed inset-0 bg-gradient-to-b from-background to-background/80 z-[-1]" />
                 {children}
