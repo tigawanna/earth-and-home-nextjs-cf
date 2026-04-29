@@ -5,6 +5,7 @@ import { PropertySearch } from "@/components/root/PropertySearch";
 import { ResponsiveDrawer } from "@/components/root/ResponsiveDrawer";
 import { SellYourHome } from "@/components/root/SellYourHome";
 import { siteinfo } from "@/config/siteinfo";
+import { getServerSideFeaturedProperties } from "@/data-access-layer/properties/server-side-property-queries";
 import { Metadata } from "next";
 import { Footer } from "@/components/root/Footer";
 
@@ -34,11 +35,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const featuredResult = await getServerSideFeaturedProperties({ limit: 1 });
+  const featuredProperty =
+    featuredResult.success && featuredResult.properties.length > 0
+      ? featuredResult.properties[0]
+      : null;
+
   return (
     <ResponsiveDrawer isLandingPage>
       <main className="min-h-screen ">
-        <Hero />
+        <Hero featuredProperty={featuredProperty} />
         {/* Search */}
         <PropertySearch />
         {/* Featured */}

@@ -1,11 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { siteinfo } from "@/config/siteinfo";
+import type { PropertiesResponse } from "@/types/domain-types";
 import { Search } from "lucide-react";
 import Link from "next/link";
-import { HeroSectionProperty, HeroSectionPropertyFallback } from "./HeroSectionProperty";
-import { Suspense } from "react";
+import { HeroFeaturedCard } from "./HeroFeaturedCard";
 
-export function Hero() {
+interface HeroProps {
+  featuredProperty: PropertiesResponse | null;
+}
+
+export function Hero({ featuredProperty }: HeroProps) {
   return (
     <section
       id="home"
@@ -15,8 +19,7 @@ export function Hero() {
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left content */}
-          <div className="animate-fade-in">
+          <div>
             <h1 className="text-5xl lg:text-6xl font-playfair font-bold text-foreground leading-tight mb-6">
               {siteinfo.hero.title}
               <span className="text-primary block">{siteinfo.hero.subtitle}</span>
@@ -25,7 +28,6 @@ export function Hero() {
               {siteinfo.hero.description}
             </p>
 
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-6 mb-8">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary">
@@ -73,11 +75,8 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right content - Featured property card */}
-          <div className="animate-scale-in">
-            <Suspense fallback={<HeroSectionPropertyFallback />}>
-              <HeroSectionProperty />
-            </Suspense>
+          <div>
+            <HeroFeaturedCard property={featuredProperty} />
           </div>
         </div>
       </div>
